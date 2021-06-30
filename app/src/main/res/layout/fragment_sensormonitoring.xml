@@ -52,4 +52,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/maxrange" />
+
+    <Button
+        android:id="@+id/button_monitoring"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sensor_output"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="159dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

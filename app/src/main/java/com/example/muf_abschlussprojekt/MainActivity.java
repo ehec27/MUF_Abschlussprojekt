@@ -14,6 +14,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_dashboard);
+
+    }
+    /*    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.fragment_sensoroutput);
         mainViewModel = new ViewModelProvider(this,
                 ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication())).get(MainViewModel.class);
@@ -50,5 +58,5 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-    }
+    }*/
 }

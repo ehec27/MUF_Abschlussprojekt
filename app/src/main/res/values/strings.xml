@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MUF_Abschlussprojekt</string>
+    <string name="sensor_monitoring">To Sensor Monitoring</string>
+    <string name="sensor_output">To Sensor Output</string>
 </resources>
