@@ -63,8 +63,8 @@ public class MainViewModel extends AndroidViewModel {
         @Override
         protected void onActive() {
             super.onActive();
-            sensorManager.registerListener(listener, gravitySensor, SensorManager.SENSOR_DELAY_UI);
-            sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(listener, gravitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
         }
 

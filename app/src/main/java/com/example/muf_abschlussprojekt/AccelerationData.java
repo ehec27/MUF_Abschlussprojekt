@@ -1,13 +1,30 @@
-Test
+
 package com.example.muf_abschlussprojekt;
 
 import android.hardware.Sensor;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "sensor")
+
 public class AccelerationData {
+
+    @PrimaryKey
+    private Long id;
+
     private Sensor sensor;
     private float x;
     private float y;
     private float z;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Sensor getSensor() {
         return sensor;
@@ -47,4 +64,6 @@ public class AccelerationData {
         this.z = z;
 
     }
+
+
 }
