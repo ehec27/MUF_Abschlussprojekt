@@ -15,6 +15,6 @@ public abstract class SensorDao {
     public abstract LiveData<ArrayList<AccelerationData>> getSensorData (float xyz); //wharscheinlich, unsicher
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract long inser (AccelerationData accelerationData);
+    public abstract long insert (AccelerationData accelerationData);
 
 }
