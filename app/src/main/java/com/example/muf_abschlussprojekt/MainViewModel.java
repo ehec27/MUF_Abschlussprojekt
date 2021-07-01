@@ -6,25 +6,60 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-public class MainViewModel extends AndroidViewModel {
-    final LiveData<AccelerationData> accelerationLiveData;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class MainViewModel extends BaseViewModel {
+    final LiveData<AccelerationData> accelerationLiveData; //auskommentieren vllt zum updaten
+    private Handler handler = new Handler(Looper.getMainLooper());
+
 
     public MainViewModel(@NonNull Application application) {
         super(application);
         accelerationLiveData = new AccelerationLiveData(application.getApplicationContext());
     }
 
-    private final static class AccelerationLiveData extends LiveData<AccelerationData> {
+  /*  public LiveData<AccelerationData> setAccelerationLiveData (AccelerationData accelerationData){
+        AccelerationLiveData
+
+    }
+    public LiveData<AccelerationData> getAccelerationData(){
+        return getDatabase().getSensorDao().getSensorData();
+    }
+    public LiveData<AccelerationData> AccelerationDataInserted(){
+        return accelerationLiveData;
+
+
+    }*/
+
+
+    public class AccelerationLiveData extends LiveData<AccelerationData> {
+        private AtomicBoolean active= new AtomicBoolean();
         private final AccelerationData accelerationData = new AccelerationData();
         private SensorManager sensorManager;
         private Sensor accelerometer;
         private Sensor gravitySensor;
         private float[] gravity;
+
+        public void insertSensor(AccelerationData accelerationData){
+            Runnable r = () -> {
+                getDatabase().getSensorDao().insert(accelerationData);
+                if (active.get()) {
+                    handler.post(() -> {
+                        setValue(accelerationData);
+                    });
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();
+        }
+
         private SensorEventListener listener = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
@@ -60,11 +95,13 @@ public class MainViewModel extends AndroidViewModel {
             }
         }
 
+
         @Override
         protected void onActive() {
             super.onActive();
-            sensorManager.registerListener(listener, gravitySensor, SensorManager.SENSOR_DELAY_UI);
-            sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI);
+            sensorManager.registerListener(listener, gravitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            active.set(true);
 
         }
 
@@ -72,6 +109,7 @@ public class MainViewModel extends AndroidViewModel {
         protected void onInactive() {
             super.onInactive();
             sensorManager.unregisterListener(listener);
+            active.set(false);
         }
 
         private float[] removeGravity(float[] gravity, float[] values) {
@@ -94,4 +132,5 @@ public class MainViewModel extends AndroidViewModel {
 
         }
     }
+
 }

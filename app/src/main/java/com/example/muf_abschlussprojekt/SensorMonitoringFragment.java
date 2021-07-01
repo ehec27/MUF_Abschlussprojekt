@@ -36,7 +36,7 @@ public class SensorMonitoringFragment extends Fragment {
         final TextView maxrange = v.findViewById(R.id.maxrange);
         final TextView power = v.findViewById(R.id.power);
         mainViewModel.accelerationLiveData.observe(getViewLifecycleOwner(), (accelerationData) -> {
-            vendor.setText("Vendor: " + accelerationData.getSensor().getVendor());
+            vendor.setText("Vendor: " + accelerationData.getSensor().getVendor()); // vllt noch anders ausgeben
             version.setText("Version: " + accelerationData.getSensor().getVersion());
             resolution.setText("Resolution: " + accelerationData.getSensor().getResolution());
             maxrange.setText("Maximum Range: " + accelerationData.getSensor().getMaximumRange());
