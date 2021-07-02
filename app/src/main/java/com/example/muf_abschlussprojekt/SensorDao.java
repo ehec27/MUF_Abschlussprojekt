@@ -7,12 +7,13 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public abstract class SensorDao {
 
-    @Query("SELECT * FROM sensor")
-    public abstract LiveData<ArrayList<AccelerationData>> getSensorData (float xyz); //wharscheinlich, unsicher
+    @Query("SELECT * FROM sensor") // Abfrage von Tabelle
+    public abstract LiveData<List<AccelerationData>> getSensorData (); //warscheinlich, unsicher -> input argument entfernt
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long insert (AccelerationData accelerationData);

@@ -13,11 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainViewModel extends BaseViewModel {
-    final LiveData<AccelerationData> accelerationLiveData; //auskommentieren vllt zum updaten
+    //final LiveData<AccelerationData> accelerationLiveData; //auskommentieren vllt zum updaten
     private Handler handler = new Handler(Looper.getMainLooper());
+    final AccelerationLiveData accelerationLiveData;
 
 
     public MainViewModel(@NonNull Application application) {
@@ -25,29 +28,32 @@ public class MainViewModel extends BaseViewModel {
         accelerationLiveData = new AccelerationLiveData(application.getApplicationContext());
     }
 
-  /*  public LiveData<AccelerationData> setAccelerationLiveData (AccelerationData accelerationData){
-        AccelerationLiveData
+    public void insertAccelerationData(AccelerationData accelerationData) { //muss hier auch eine List ausgegeben werden?
+        Runnable r = () -> {
+            getDatabase().getSensorDao().insert(accelerationData);
+        };
+        Thread t = new Thread(r);
+        t.start();
+    }
 
+    public LiveData<List<AccelerationData>> getAccelerationData() {
+        return getDatabase().getSensorDao().getSensorData(); //es muss eine ArrayList zurückgegeben werden
     }
-    public LiveData<AccelerationData> getAccelerationData(){
-        return getDatabase().getSensorDao().getSensorData();
-    }
-    public LiveData<AccelerationData> AccelerationDataInserted(){
+
+    public LiveData<AccelerationData> AccelerationDataInserted() {
         return accelerationLiveData;
-
-
-    }*/
+    }
 
 
     public class AccelerationLiveData extends LiveData<AccelerationData> {
-        private AtomicBoolean active= new AtomicBoolean();
+        private AtomicBoolean active = new AtomicBoolean();
         private final AccelerationData accelerationData = new AccelerationData();
         private SensorManager sensorManager;
-        private Sensor accelerometer;
-        private Sensor gravitySensor;
+        private Sensor accelerometer; // Beschleunigungssensor benannt
+        private Sensor gravitySensor; // Schwerkraftsensor benannt
         private float[] gravity;
 
-        public void insertSensor(AccelerationData accelerationData){
+        public void insertSensor(AccelerationData accelerationData) {
             Runnable r = () -> {
                 getDatabase().getSensorDao().insert(accelerationData);
                 if (active.get()) {
@@ -85,11 +91,12 @@ public class MainViewModel extends BaseViewModel {
             }
         };
 
+        // Muss vermutlich noch in der Klasse integriert werden, ansnsten doppelt...
         AccelerationLiveData(Context context) {
             sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
             if (sensorManager != null) {
-                gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-                accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+                gravitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY); //Zugriff auf Schwerkraftsensor
+                accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER); //Zugriff auf Beschleunigungssensor
             } else {
                 throw new RuntimeException("Nope! Try again...");
             }
@@ -99,8 +106,8 @@ public class MainViewModel extends BaseViewModel {
         @Override
         protected void onActive() {
             super.onActive();
-            sensorManager.registerListener(listener, gravitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-            sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            sensorManager.registerListener(listener, gravitySensor, SensorManager.SENSOR_DELAY_NORMAL); // Ausgabe Geschwindigkeit
+            sensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL); // Manuell anpassen?
             active.set(true);
 
         }
@@ -112,6 +119,7 @@ public class MainViewModel extends BaseViewModel {
             active.set(false);
         }
 
+        // Schwerkraft abziehen
         private float[] removeGravity(float[] gravity, float[] values) {
             if (gravity == null) {
                 return values;

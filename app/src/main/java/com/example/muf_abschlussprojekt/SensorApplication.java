@@ -11,7 +11,7 @@ public class SensorApplication extends Application {
     public void onCreate() {
         super.onCreate();
         sensorDatabase = Room
-                .databaseBuilder(this, SensorDatabase.class, "acceleration").build();
+                .databaseBuilder(this, SensorDatabase.class, "acceleration").build(); // Datenbankname: acceleration
     }
 
     public SensorDatabase getSensorDatabase(){

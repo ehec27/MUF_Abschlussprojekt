@@ -53,6 +53,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/maxrange" />
 
+<!--    ausgabe Datenbank-->
+    <TextView
+        android:id="@+id/monitoring_xyz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/power" />
+
+
     <Button
         android:id="@+id/button_monitoring"
         android:layout_width="match_parent"

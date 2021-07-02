@@ -10,39 +10,47 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 public class SensorMonitoringFragment extends Fragment {
     private MainViewModel mainViewModel;
+    private LiveData<AccelerationData> accelerationDataLiveData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mainViewModel = new ViewModelProvider(this,
-                ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())).get(MainViewModel.class);
+        mainViewModel = new ViewModelProvider(getActivity(),
+                ViewModelProvider.AndroidViewModelFactory
+                        .getInstance(getActivity().getApplication())).get(MainViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_sensormonitoring, container, false);
+        View v = inflater.inflate(R.layout.fragment_sensormonitoring, container, false);
 
         final TextView vendor = v.findViewById(R.id.vendor);
         final TextView version = v.findViewById(R.id.version);
         final TextView resolution = v.findViewById(R.id.resolution);
         final TextView maxrange = v.findViewById(R.id.maxrange);
         final TextView power = v.findViewById(R.id.power);
-        mainViewModel.accelerationLiveData.observe(getViewLifecycleOwner(), (accelerationData) -> {
+        final TextView monitoring_xyz = v.findViewById(R.id.monitoring_xyz);
+        mainViewModel.accelerationLiveData.observe(getViewLifecycleOwner(), accelerationData -> {
             vendor.setText("Vendor: " + accelerationData.getSensor().getVendor()); // vllt noch anders ausgeben
             version.setText("Version: " + accelerationData.getSensor().getVersion());
             resolution.setText("Resolution: " + accelerationData.getSensor().getResolution());
             maxrange.setText("Maximum Range: " + accelerationData.getSensor().getMaximumRange());
             power.setText("Power: " + accelerationData.getSensor().getPower());
+        });
 
-
+        mainViewModel.AccelerationDataInserted().observe(getViewLifecycleOwner(), accelerationData -> {
+            monitoring_xyz.setText("x Wert: " + accelerationData.getX() +
+                    "y Wert: " + accelerationData.getY() +
+                    "z Wert: " + accelerationData.getZ());
         });
         return v;
 
