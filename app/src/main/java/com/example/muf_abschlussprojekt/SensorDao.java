@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public abstract class SensorDao {
 
-    @Query("SELECT * FROM sensor") // Abfrage von Tabelle
+    @Query("SELECT * FROM sensor LIMIT 1") // Abfrage von Tabelle
     public abstract LiveData<List<AccelerationData>> getSensorData (); //warscheinlich, unsicher -> input argument entfernt
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

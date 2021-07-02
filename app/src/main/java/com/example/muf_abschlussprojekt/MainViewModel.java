@@ -8,12 +8,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Looper;
-
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -37,7 +33,8 @@ public class MainViewModel extends BaseViewModel {
     }
 
     public LiveData<List<AccelerationData>> getAccelerationData() {
-        return getDatabase().getSensorDao().getSensorData(); //es muss eine ArrayList zurückgegeben werden
+        return getDatabase().getSensorDao().getSensorData();//es muss eine List zurückgegeben werden
+
     }
 
     public LiveData<AccelerationData> AccelerationDataInserted() {
@@ -53,7 +50,7 @@ public class MainViewModel extends BaseViewModel {
         private Sensor gravitySensor; // Schwerkraftsensor benannt
         private float[] gravity;
 
-        public void insertSensor(AccelerationData accelerationData) {
+ /*       public void insertSensor(AccelerationData accelerationData) {
             Runnable r = () -> {
                 getDatabase().getSensorDao().insert(accelerationData);
                 if (active.get()) {
@@ -64,7 +61,7 @@ public class MainViewModel extends BaseViewModel {
             };
             Thread t = new Thread(r);
             t.start();
-        }
+        }*/
 
         private SensorEventListener listener = new SensorEventListener() {
             @Override

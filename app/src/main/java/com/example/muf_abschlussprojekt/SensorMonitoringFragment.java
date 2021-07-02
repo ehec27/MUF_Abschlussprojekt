@@ -1,5 +1,6 @@
 package com.example.muf_abschlussprojekt;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+
+import java.util.List;
 
 public class SensorMonitoringFragment extends Fragment {
     private MainViewModel mainViewModel;
@@ -47,11 +50,12 @@ public class SensorMonitoringFragment extends Fragment {
             power.setText("Power: " + accelerationData.getSensor().getPower());
         });
 
-        mainViewModel.AccelerationDataInserted().observe(getViewLifecycleOwner(), accelerationData -> {
-            monitoring_xyz.setText("x Wert: " + accelerationData.getX() +
-                    "y Wert: " + accelerationData.getY() +
-                    "z Wert: " + accelerationData.getZ());
-        });
+       mainViewModel.getAccelerationData().observe(getViewLifecycleOwner(), accelerationData ->  {
+           monitoring_xyz.setText("Werte: " + mainViewModel.getAccelerationData().getValue());
+       });
+         // vllt noch ande ;*/
+
+
         return v;
 
     }
