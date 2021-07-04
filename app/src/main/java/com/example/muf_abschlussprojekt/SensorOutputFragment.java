@@ -34,10 +34,14 @@ public class SensorOutputFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_sensoroutput, container, false);
         final TextView name = v.findViewById(R.id.name);
-        final TextView xyz = v.findViewById(R.id.xyz);
+        final TextView x = v.findViewById(R.id.x);
+        final TextView y = v.findViewById(R.id.y);
+        final TextView z = v.findViewById(R.id.z);
         mainViewModel.accelerationLiveData.observe(getViewLifecycleOwner(), accelerationData -> {
             name.setText("Name" + accelerationData.getSensor().getName()); // Sensorvideo Minute 42; Output ggf anpassen!
-            xyz.setText("x Wert: " + accelerationData.getX() + "y Wert: " + accelerationData.getY() + "z Wert: " + accelerationData.getZ());
+            x.setText("x Wert: " + accelerationData.getX()+ " m/s²");
+            y.setText("y Wert: " + accelerationData.getY() + " m/s²");
+            z.setText("z Wert: " + accelerationData.getZ() + " m/s²");
             mainViewModel.insertAccelerationData(accelerationData);
 //hier runnable rein über viewmodel
         });

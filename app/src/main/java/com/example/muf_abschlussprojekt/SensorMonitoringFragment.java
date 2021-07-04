@@ -51,7 +51,9 @@ public class SensorMonitoringFragment extends Fragment {
         });
 
        mainViewModel.getAccelerationData().observe(getViewLifecycleOwner(), accelerationData ->  {
-           monitoring_xyz.setText("x: " + accelerationData.get(0).getX() + " y: " + accelerationData.get(0).getY() + " z: " + accelerationData.get(0).getZ());
+           monitoring_xyz.setText("x: " + accelerationData.get(0).getX() +
+                   " m/s² y: " + accelerationData.get(0).getY() +
+                   " m/s² z: " + accelerationData.get(0).getZ() +" m/s²");
        });
          // vllt noch ande ;*/
 
